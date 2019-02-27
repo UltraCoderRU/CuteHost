@@ -1,0 +1,6 @@
+[submodule "nodeeditor"]
+	path = ext/nodeeditor
+	url = https://github.com/paceholder/nodeeditor.git
+[submodule "vst3sdk"]
+	path = ext/vst3sdk
+	url = https://github.com/steinbergmedia/vst3sdk.git
