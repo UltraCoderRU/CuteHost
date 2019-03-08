@@ -49,15 +49,15 @@ IncludeCategories:
   - Regex: '^".*.hpp"'
     Priority: 1
   - Regex: '^<boost/.*>'
-    Priority: 5
-  - Regex: '^<.*.(h|hpp)>'
-    Priority: 3
-  - Regex: '^<queue>'
-    Priority: 6
-  - Regex: '^<Q.*>'
+    Priority: 8
+  - Regex: '^<.*/.*>'
     Priority: 4
-  - Regex: '^<.*>'
+  - Regex: '^<queue>'
+    Priority: 10
+  - Regex: '^<Q.*>'
     Priority: 6
+  - Regex: '^<.*>'
+    Priority: 10
 IndentCaseLabels: false
 IndentPPDirectives: None
 IndentWidth: 4

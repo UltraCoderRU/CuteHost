@@ -5,20 +5,23 @@ if(POLICY CMP0071)
 	set(CMAKE_POLICY_DEFAULT_CMP0071 OLD)
 endif()
 
+if(POLICY CMP0074)
+	set(CMAKE_POLICY_DEFAULT_CMP0074 NEW)
+endif()
+
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build static libraries")
 
-set(SMTG_ADD_VST3_PLUGINS_SAMPLES OFF CACHE BOOL "")
-set(SMTG_ADD_VST3_HOSTING_SAMPLES OFF CACHE BOOL "")
-set(SMTG_VSTGUI_TOOLS OFF CACHE BOOL "")
-#add_subdirectory(ext/vst3sdk)
+# Build external libraries
+add_subdirectory(ext)
+
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/ext/juce-cmake/cmake)
 
 find_package(Qt5 REQUIRED Core Gui Quick)
 
-set(BUILD_EXAMPLES OFF CACHE BOOL "")
-add_subdirectory(ext/nodeeditor)
-
+# Build CuteHost sources
 add_subdirectory(src)

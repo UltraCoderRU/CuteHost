@@ -7,7 +7,7 @@ QtNodes::NodeDataType PluginNodeData::type() const
 	return QtNodes::NodeDataType{"PluginNodeData", "Plugin Node Data"};
 }
 
-Plugin::Ptr PluginNodeData::plugin()
+AudioPlugin::Ptr PluginNodeData::plugin()
 {
 	return plugin_;
 }

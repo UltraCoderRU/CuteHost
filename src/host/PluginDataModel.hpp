@@ -1,13 +1,14 @@
 #ifndef _CUTEHOST_PLUGIN_DATA_MODEL_HPP_
 #define _CUTEHOST_PLUGIN_DATA_MODEL_HPP_
 
-#include "BasicPlugin.hpp"
+#include "AudioPlugin.hpp"
+
+#include <nodes/NodeData>
+#include <nodes/NodeDataModel>
 
 #include <QObject>
 
 #include <memory>
-#include <nodes/NodeData>
-#include <nodes/NodeDataModel>
 
 namespace CuteHost {
 
@@ -17,10 +18,10 @@ class PluginNodeData : public QtNodes::NodeData
 {
 public:
 	QtNodes::NodeDataType type() const override;
-	Plugin::Ptr plugin();
+	AudioPlugin::Ptr plugin();
 
 private:
-	Plugin::Ptr plugin_;
+	AudioPlugin::Ptr plugin_;
 };
 
 //------------------------------------------------------------------------------

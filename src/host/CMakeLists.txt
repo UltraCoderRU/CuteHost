@@ -9,6 +9,6 @@ file(GLOB HEADERS *.h)
 add_executable(${TARGET_NAME} ${SOURCES} ${HEADERS})
 
 target_link_libraries(${TARGET_NAME}
-	core
+	CuteHost::Core
 	NodeEditor::nodes
 )

@@ -1,14 +1,15 @@
 #include "MainWindow.hpp"
 
+#include "AudioPluginHost.hpp"
 #include "PluginDataModel.hpp"
-
-#include <QKeySequence>
-#include <QMenuBar>
 
 #include <nodes/DataModelRegistry>
 #include <nodes/FlowScene>
 #include <nodes/FlowView>
 #include <nodes/FlowViewStyle>
+
+#include <QKeySequence>
+#include <QMenuBar>
 
 namespace CuteHost {
 
@@ -39,6 +40,8 @@ void setStyle()
 
 MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent)
 {
+	pluginHost_ = std::make_shared<AudioPluginHost>();
+
 	setupMenu();
 
 	CuteHost::setStyle();
@@ -47,9 +50,12 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent)
 	setCentralWidget(new QtNodes::FlowView(scene_));
 }
 
+MainWindow::~MainWindow() = default;
+
 void MainWindow::loadWorkspace()
 {
-	scene_->load();
+	// scene_->load();
+	pluginHost_->scan();
 }
 
 void MainWindow::saveWorkspace()

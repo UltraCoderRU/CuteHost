@@ -3,17 +3,22 @@
 
 #include <QMainWindow>
 
+#include <memory>
+
 namespace QtNodes {
 class FlowScene;
 }
 
 namespace CuteHost {
 
+class AudioPluginHost;
+
 class MainWindow : public QMainWindow
 {
 	Q_OBJECT
 public:
 	explicit MainWindow(QWidget* parent = nullptr);
+	~MainWindow() override;
 
 private slots:
 	void loadWorkspace();
@@ -23,6 +28,7 @@ private:
 	void setupMenu();
 
 	QtNodes::FlowScene* scene_;
+	std::shared_ptr<AudioPluginHost> pluginHost_;
 };
 
 } // namespace CuteHost
