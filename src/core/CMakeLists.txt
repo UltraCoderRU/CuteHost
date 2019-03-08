@@ -8,12 +8,17 @@ find_package(JUCE REQUIRED
 set(TARGET_NAME core)
 
 file(GLOB SOURCES src/*.cpp)
-file(GLOB HEADERS include/*.h)
-add_library(${TARGET_NAME} ${SOURCES} ${HEADERS})
+file(GLOB HEADERS include/*.hpp)
+add_library(${TARGET_NAME} STATIC ${SOURCES} ${HEADERS})
 add_library(CuteHost::Core ALIAS ${TARGET_NAME})
 
 target_include_directories(${TARGET_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_include_directories(${TARGET_NAME} PUBLIC ${JUCE_INCLUDE_DIR} ${CMAKE_BINARY_DIR})
+
+target_include_directories(${TARGET_NAME} PRIVATE
+	${CMAKE_BINARY_DIR}
+	${JUCE_INCLUDE_DIR}
+	${VST_INCLUDE_DIR}
+)
 
 target_link_libraries(${TARGET_NAME} PUBLIC Qt5::Core)
 target_link_libraries(${TARGET_NAME} PRIVATE ${JUCE_LIBRARIES})
@@ -50,3 +55,7 @@ target_compile_definitions(${TARGET_NAME}
 	JUCE_PLUGINHOST_AU=0
 	DONT_SET_USING_JUCE_NAMESPACE
 )
+
+if (MSVC)
+	target_compile_options(${TARGET_NAME} PUBLIC /bigobj)
+endif()
