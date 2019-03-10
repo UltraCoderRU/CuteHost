@@ -8,7 +8,7 @@ find_package(JUCE REQUIRED
 set(TARGET_NAME core)
 
 file(GLOB SOURCES src/*.cpp)
-file(GLOB HEADERS include/*.hpp)
+file(GLOB_RECURSE HEADERS *.hpp)
 add_library(${TARGET_NAME} STATIC ${SOURCES} ${HEADERS})
 add_library(CuteHost::Core ALIAS ${TARGET_NAME})
 

@@ -1,3 +1,4 @@
+#include "JuceApplication.hpp"
 #include "MainWindow.hpp"
 
 #include <QApplication>
@@ -8,6 +9,7 @@
 int main(int argc, char* argv[])
 {
 	QApplication a(argc, argv);
+	a.setApplicationVersion(CUTEHOST_APPLICATION_VERSION);
 
 	QFile f(":/qdarkstyle/style.qss");
 	if (!f.exists())
@@ -20,6 +22,9 @@ int main(int argc, char* argv[])
 		QTextStream ts(&f);
 		a.setStyleSheet(ts.readAll());
 	}
+
+	auto& juceApp = CuteHost::JuceApplication::instance();
+	QObject::connect(&a, &QApplication::aboutToQuit, &juceApp, &CuteHost::JuceApplication::quit);
 
 	CuteHost::MainWindow window;
 

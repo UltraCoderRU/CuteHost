@@ -48,14 +48,16 @@ IncludeBlocks: Regroup
 IncludeCategories:
   - Regex: '^".*.hpp"'
     Priority: 1
+  - Regex: '^<JuceHeader.h>'
+    Priority: 3
   - Regex: '^<boost/.*>'
     Priority: 8
-  - Regex: '^<.*/.*>'
-    Priority: 4
   - Regex: '^<queue>'
     Priority: 10
   - Regex: '^<Q.*>'
     Priority: 6
+  - Regex: '^<.*/.*>'
+    Priority: 4
   - Regex: '^<.*>'
     Priority: 10
 IndentCaseLabels: false

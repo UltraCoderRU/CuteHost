@@ -17,18 +17,24 @@ class MainWindow : public QMainWindow
 {
 	Q_OBJECT
 public:
-	explicit MainWindow(QWidget* parent = nullptr);
+	explicit MainWindow();
 	~MainWindow() override;
 
 private slots:
 	void loadWorkspace();
 	void saveWorkspace();
 
+	void insertPlugin();
+	void removePlugin();
+	void scanForPlugins();
+
+	void showAboutDialog();
+
 private:
 	void setupMenu();
 
 	QtNodes::FlowScene* scene_;
-	std::shared_ptr<AudioPluginHost> pluginHost_;
+	std::unique_ptr<AudioPluginHost> pluginHost_;
 };
 
 } // namespace CuteHost

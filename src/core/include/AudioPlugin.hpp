@@ -3,14 +3,66 @@
 
 #include <QObject>
 #include <QString>
+#include <QUuid>
 
 #include <memory>
 
 namespace juce {
-class AudioProcessor;
-}
+class PluginDescription;
+class AudioPluginInstance;
+} // namespace juce
 
 namespace CuteHost {
+
+class PluginWindow;
+
+enum class AudioPluginType
+{
+	VST3,
+	VST2
+};
+
+enum class AudioPluginGroup
+{
+	Effect,
+	Instrument,
+	Other
+};
+
+/// juce::PluginDescription wrapper
+class AudioPluginInfo
+{
+public:
+	AudioPluginInfo(QUuid id, AudioPluginType type, const juce::PluginDescription& pluginDescription);
+	AudioPluginInfo(const AudioPluginInfo&);
+	AudioPluginInfo(AudioPluginInfo&&);
+	AudioPluginInfo& operator=(AudioPluginInfo);
+
+	QUuid id() const;
+	AudioPluginType type() const;
+
+	QString name() const;
+	QString path() const;
+	QString description() const;
+	QString category() const;
+	AudioPluginGroup group() const;
+	QString manufacturerName() const;
+	QString version() const;
+
+	unsigned int inputCount() const;
+	unsigned int outputCount() const;
+
+	int internalId() const;
+
+	juce::PluginDescription internalDescription() const;
+
+	void swap(AudioPluginInfo&) noexcept;
+
+private:
+	QUuid id_;
+	AudioPluginType type_;
+	std::unique_ptr<juce::PluginDescription> internal_;
+};
 
 class PluginPort
 {
@@ -39,41 +91,53 @@ private:
 	QString name_;
 };
 
+/// Plugin instance
 class AudioPlugin final : public QObject
 {
 	Q_OBJECT
 public:
 	using Ptr = std::shared_ptr<AudioPlugin>;
 	using Id = QUuid;
+	using Type = AudioPluginType;
+	using InstancePtr = std::shared_ptr<juce::AudioPluginInstance>;
 
-	enum Type
-	{
-		VST3,
-		VST2
-	};
-
-	explicit AudioPlugin(std::shared_ptr<juce::AudioProcessor> processor);
+	AudioPlugin(QUuid id, AudioPluginInfo info, InstancePtr instance);
 	~AudioPlugin() override;
 
-	Type type() const noexcept;
-	const QString& name() const noexcept;
+	/// Instance id
+	Id id() const noexcept;
+
+	/// Plugin information
+	AudioPluginInfo info() const;
+
+	/// List of plugin input ports
+	const std::vector<PluginPort>& inputs() const;
+
+	/// List of plugin output ports
+	const std::vector<PluginPort>& outputs() const;
 
 	void setBypass(bool);
+
+	void showEditor();
 
 private:
 	void addPort(PluginPort port);
 
-	Type type_;
-	QString name_;
+	Id id_;
+	AudioPluginInfo info_;
 
-	std::shared_ptr<juce::AudioProcessor> processor_;
+	InstancePtr instance_;
 
 	std::vector<PluginPort> inputs_;
 	std::vector<PluginPort> outputs_;
+
+	std::shared_ptr<PluginWindow> window_;
 
 	friend class AudioPluginHost;
 };
 
 } // namespace CuteHost
+
+Q_DECLARE_METATYPE(CuteHost::AudioPlugin::Ptr)
 
 #endif // _BASIC_PLUGIN_HPP_

@@ -5,24 +5,38 @@
 
 #include <QObject>
 
+#include <map>
+
 namespace juce {
 class AudioProcessorGraph;
-}
+class AudioPluginFormatManager;
+} // namespace juce
 
 namespace CuteHost {
 
-class AudioPluginHost : public QObject
+class AudioPluginHost final : public QObject
 {
 	Q_OBJECT
 public:
 	AudioPluginHost();
 	~AudioPluginHost() override;
 
-	void scan();
-	void addPlugin(AudioPlugin::Ptr plugin);
+	AudioPlugin::Ptr loadPlugin(const QUuid& id);
+	void unloadPlugin(const QUuid& id);
+
+	void showEditor(const QUuid& id);
+
+	AudioPlugin::Ptr getPluginById(const QUuid& id);
+
+signals:
+	void newPlugin(AudioPlugin::Ptr);
 
 private:
-	std::shared_ptr<juce::AudioProcessorGraph> graph_;
+	std::map<AudioPlugin::Id, AudioPlugin::Ptr> plugins_;
+	std::unique_ptr<juce::AudioProcessorGraph> graph_;
+	std::unique_ptr<juce::AudioPluginFormatManager> pluginManager_;
+
+	unsigned int sampleRate_;
 };
 
 } // namespace CuteHost
